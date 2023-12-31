@@ -6,6 +6,7 @@ RUN apt-get update && \
 apt-get install -y shellinabox && \
 apt-get install -y systemd && \
 apt-get clean && \
+apt install sudo nano curl fetch
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN echo 'root:root' | chpasswd
 # Expose the web-based terminal port
