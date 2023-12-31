@@ -3,7 +3,6 @@ FROM ubuntu:20.04
 
 # Install necessary packages
 RUN apt-get update && \
-apt-get install sudo nano curl fetch
 apt-get install -y shellinabox && \
 apt-get install -y systemd && \
 apt-get clean && \
