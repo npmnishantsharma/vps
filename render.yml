@@ -1,0 +1,11 @@
+name: my-vscode-editor
+services:
+  - type: web
+    name: my-vscode-editor
+    env:
+      NODE_ENV: production
+    dockerfile: Dockerfile
+    http_port: 3000
+    health_check:
+      http_path: /
+      tcp_port: 3000
