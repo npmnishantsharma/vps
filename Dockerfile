@@ -13,4 +13,3 @@ EXPOSE 4200
 
 # Start shellinabox
 CMD ["/usr/bin/shellinaboxd", "-t", "-s", "/:LOGIN"]"
- https://github.com/npmnishantsharma/vps/commit/c7fe77cf4b7a9396b144d6444f9795fe8c004d57#:~:text=%23%20Use%20a,%22/%3ALOGIN%22%5D
