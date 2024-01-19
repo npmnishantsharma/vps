@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 RUN apt-get update && \
 apt-get install -y shellinabox && \
 apt-get install -y systemd && \
-apt-get clean && \
+apt-get install -y sudo wget && \
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN echo 'root:root' | chpasswd
 # Expose the web-based terminal port
