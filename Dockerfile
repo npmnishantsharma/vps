@@ -1,37 +1,25 @@
-# Use an official Ubuntu as a base image
-FROM ubuntu:20.04
+# Use the Pterodactyl Panel image
+FROM ghcr.io/pterodactyl/panel:latest
 
-# Update and install dependencies
-RUN apt-get update && apt-get -y upgrade
-RUN apt-get -y install curl zip unzip tar
-
-# Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get install -y nodejs
-
-# Download and install Pterodactyl Panel
-WORKDIR /var/www
-RUN curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
-RUN tar --strip-components=1 -xzvf panel.tar.gz
-
-# Create necessary directories
-RUN mkdir -p storage/bootstrap/cache
-
-# Apply permissions using find
-RUN find storage bootstrap -type f -exec chmod 644 {} \; && \
-    find storage bootstrap -type d -exec chmod 755 {} \; && \
-    chown -R www-data:www-data /var/www
-
-# Install Composer dependencies
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer install --no-dev --optimize-autoloader
+# Set environment variables
+ENV APP_URL=https://pterodactyl.example.com \
+    APP_TIMEZONE=UTC \
+    APP_SERVICE_AUTHOR=noreply@example.com \
+    TRUSTED_PROXIES=* \
+    LE_EMAIL="" \
+    MAIL_FROM=noreply@example.com \
+    MAIL_DRIVER=smtp \
+    MAIL_HOST=mail \
+    MAIL_PORT=1025 \
+    MAIL_USERNAME="" \
+    MAIL_PASSWORD="" \
+    DB_PASSWORD="CHANGE_ME"
 
 # Expose necessary ports
-EXPOSE 8080
+EXPOSE 80 443
 
-# Install the Pterodactyl CLI tool
-RUN curl -Lo /usr/local/bin/pterodactyl https://github.com/pterodactyl/panel/releases/latest/download/pterodactyl
-RUN chmod +x /usr/local/bin/pterodactyl
+# Set up volumes
+VOLUME /app/var/ /etc/nginx/http.d/ /etc/letsencrypt/ /app/storage/logs
 
-# Set the CMD to create a user when the container starts
-CMD ["pterodactyl", "user:create", "--email=user@example.com", "--username=myusername", "--name=Full Name", "--password=mypassword", "--language=en"]
+# Specify the entry point
+CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "80"]
