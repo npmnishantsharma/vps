@@ -1,22 +1,16 @@
+# Use a base image that supports systemd, for example, Ubuntu
 FROM ubuntu:20.04
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    gnupg \
-    lsb-release
+# Install necessary packages
+RUN apt-get update && \
+apt-get install -y shellinabox && \
+apt-get install -y systemd && \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN echo 'root:root' | chpasswd
+# Expose the web-based terminal port
+EXPOSE 4200
 
-# Add Microsoft's GPG key
-RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
-
-# Add the VS Code repository
-RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
-
-# Update package lists and install VS Code
-RUN apt-get update && apt-get install -y code
-
-# Expose the VS Code port
-EXPOSE 3000
-
-# Start the VS Code Server
-CMD ["code-server", "--auth", "none", "--host", "0.0.0.0", "--port", "3000"]
+# Start shellinabox
+CMD ["/usr/bin/shellinaboxd", "-t", "-s", "/:LOGIN"]"
+ https://github.com/npmnishantsharma/vps/commit/c7fe77cf4b7a9396b144d6444f9795fe8c004d57#:~:text=%23%20Use%20a,%22/%3ALOGIN%22%5D
