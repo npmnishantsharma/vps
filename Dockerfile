@@ -13,6 +13,11 @@ RUN apt-get install -y nodejs
 WORKDIR /var/www
 RUN curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
 RUN tar --strip-components=1 -xzvf panel.tar.gz
+
+# Create necessary directories
+RUN mkdir -p storage/bootstrap/cache
+
+# Apply permissions
 RUN chmod -R 755 storage/* bootstrap/cache
 
 # Install Composer dependencies
@@ -22,5 +27,9 @@ RUN composer install --no-dev --optimize-autoloader
 # Expose necessary ports
 EXPOSE 8080
 
-# Start the Pterodactyl Panel
-CMD php artisan serve --host=0.0.0.0 --port=8080
+# Install the Pterodactyl CLI tool
+RUN curl -Lo /usr/local/bin/pterodactyl https://github.com/pterodactyl/panel/releases/latest/download/pterodactyl
+RUN chmod +x /usr/local/bin/pterodactyl
+
+# Set the CMD to create a user when the container starts
+CMD ["pterodactyl", "user:create", "--email=user@example.com", "--username=myusername", "--name=Full Name", "--password=mypassword", "--language=en"]
