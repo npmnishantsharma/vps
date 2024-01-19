@@ -1,5 +1,5 @@
 # Use an official Ubuntu as a base image
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 # Update and install dependencies
 RUN apt-get update && apt-get -y upgrade
@@ -17,8 +17,10 @@ RUN tar --strip-components=1 -xzvf panel.tar.gz
 # Create necessary directories
 RUN mkdir -p storage/bootstrap/cache
 
-# Apply permissions
-RUN chmod -R 755 storage/* bootstrap/cache
+# Apply permissions using find
+RUN find storage bootstrap -type f -exec chmod 644 {} \; && \
+    find storage bootstrap -type d -exec chmod 755 {} \; && \
+    chown -R www-data:www-data /var/www
 
 # Install Composer dependencies
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
