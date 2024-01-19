@@ -1,13 +1,26 @@
-FROM ubuntu:20.04
+# Use an official Ubuntu as a base image
+FROM ubuntu:18.04
 
+# Update and install dependencies
+RUN apt-get update && apt-get -y upgrade
+RUN apt-get -y install curl zip unzip tar
+
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
+
+# Download and install Pterodactyl Panel
+WORKDIR /var/www
+RUN curl -Lo panel.tar.gz https://github.com/pterodactyl/panel/releases/latest/download/panel.tar.gz
+RUN tar --strip-components=1 -xzvf panel.tar.gz
+RUN chmod -R 755 storage/* bootstrap/cache
+
+# Install Composer dependencies
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer install --no-dev --optimize-autoloader
+
+# Expose necessary ports
 EXPOSE 8080
 
-RUN apk add --update go git && \
-  mkdir -p /tmp/gotty && \
-  GOPATH=/tmp/gotty go get github.com/yudai/gotty && \
-  mv /tmp/gotty/bin/gotty /usr/local/bin/ && \
-  apk del go git && \
-  rm -rf /tmp/gotty /var/cache/apk/*
-
-ENTRYPOINT ["/usr/local/bin/gotty"]
-CMD ["--permit-write","--reconnect","/bin/sh"]
+# Start the Pterodactyl Panel
+CMD php artisan serve --host=0.0.0.0 --port=8080
