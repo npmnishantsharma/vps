@@ -1,14 +1,17 @@
 FROM ubuntu:20.04
 
-# Install necessary packages
-RUN apt-get update && \
-apt-get install -y shellinabox && \
-apt-get install -y systemd && \
-apt-get install -y sudo wget curl neofetch tar unzip curl software-properties-common && \
-rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN echo 'root:root' | chpasswd
-# Expose the web-based terminal port
-EXPOSE 80 443 3000 5000 8080
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    gnupg2 \
+    docker
 
-# Start shellinabox
-CMD ["/usr/bin/shellinaboxd", "-t", "-s", "/:LOGIN"]"
+# Install Gotty
+RUN curl -sL https://dl.get-gotty.com | sh
+
+# Expose port 8080 for Gotty
+EXPOSE 8080 80 1000 2000 433 5000
+
+# Set the default command to start Gotty
+CMD ["gotty", "--once", "--permit-write", "--port", "8080"]
