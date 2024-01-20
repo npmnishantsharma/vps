@@ -1,14 +1,13 @@
-FROM ubuntu:20.04
+FROM pterodactyl/web
 
-# Install necessary packages
-RUN apt-get update && \
-apt-get install -y shellinabox && \
-apt-get install -y systemd && \
-apt-get install -y sudo wget curl neofetch tar unzip curl software-properties-common && \
-rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN echo 'root:root' | chpasswd
-# Expose the web-based terminal port
-EXPOSE 80 443 3000 5000 8080
+# Expose ports for Pterodactyl panel and Wings
+EXPOSE 80 3347
 
-# Start shellinabox
-CMD ["/usr/bin/shellinaboxd", "-t", "-s", "/:LOGIN"]"
+# Set environment variables
+ENV PANEL_URL=http://localhost
+ENV MYSQL_DATABASE=pterodactyl
+ENV MYSQL_USERNAME=root
+ENV MYSQL_PASSWORD=password
+
+# Install Wings automatically during container startup
+RUN pterodactyl/wings install
