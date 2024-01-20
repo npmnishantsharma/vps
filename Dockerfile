@@ -1,17 +1,9 @@
-FROM ubuntu:20.04
+FROM debian:bookworm
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    git \
-    gnupg2 \
-    docker
-
-# Install Gotty
-RUN curl -sL https://dl.get-gotty.com | sh
-
-# Expose port 8080 for Gotty
-EXPOSE 8080 80 1000 2000 433 5000
-
-# Set the default command to start Gotty
-CMD ["gotty", "--once", "--permit-write", "--port", "8080"]
+RUN apt update && apt upgrade -y
+RUN apt install -y curl neofetch docker nano docker-compose xterm wget htop && curl -sSLo gotty https://raw.githubusercontent.com/afnan007a/Replit-Vm/main/gotty
+RUN chmod +x gotty && mv gotty /usr/bin/
+ENV TERM=xterm
+WORKDIR /root
+EXPOSE 80 433 800
+CMD gotty -p 800 -w bash
