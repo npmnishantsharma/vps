@@ -1,0 +1,18 @@
+debug: false
+uuid: 5562fec2-7ebb-463c-ace5-49b7a12e06f5
+token_id: R44VgdEGX0ijz02N
+token: TYOoKfls9qI8164cXB7qiWURikDcVzOvGhYaLFGfi43SVrZagarkBOhpHHYYfkIr
+api:
+  host: 0.0.0.0
+  port: 8080
+  ssl:
+    enabled: false
+    cert: /etc/certs/fullchain.pem
+    key: /etc/certs/privkey.pem
+  upload_limit: 100
+system:
+  data: /var/lib/pterodactyl/volumes
+  sftp:
+    bind_port: 2022
+allowed_mounts: []
+remote: 'https://panel.viraaspirants.in'
