@@ -1,12 +1,12 @@
 debug: false
-uuid: 5562fec2-7ebb-463c-ace5-49b7a12e06f5
-token_id: R44VgdEGX0ijz02N
-token: TYOoKfls9qI8164cXB7qiWURikDcVzOvGhYaLFGfi43SVrZagarkBOhpHHYYfkIr
+uuid: 3fab1623-d84a-448e-8f72-716647430378
+token_id: R7njDGGu4wFmC8qm
+token: 9hEKlm9KKCyNYgIfAoatrJUO7iJuvOhfOD3BkSUMq34O172llcuMiKENMAJoF5Hk
 api:
   host: 0.0.0.0
   port: 8080
   ssl:
-    enabled: false
+    enabled: true
     cert: /etc/certs/fullchain.pem
     key: /etc/certs/privkey.pem
   upload_limit: 100
@@ -15,4 +15,4 @@ system:
   sftp:
     bind_port: 2022
 allowed_mounts: []
-remote: 'https://panel.viraaspirants.in'
+remote: 'http://panel.nishantapps.in'
